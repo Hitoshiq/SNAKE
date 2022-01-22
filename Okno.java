@@ -6,10 +6,11 @@ import java.awt.event.ActionListener;
 public class Okno extends JPanel implements ActionListener{
     int WIDTH = 1000;
     int HEIGHT = 1000;
-    int CELL = 10;
+    int CELL = 50;
     int DELAY = 60;
     boolean play;
     Timer timer;
+    Snake snake = new Snake(CELL, Color.BLACK, CELL, 'R', 100, 100);
 
     public Okno(){
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -19,7 +20,6 @@ public class Okno extends JPanel implements ActionListener{
     }
 
     public void start(){
-        Snake snake = new Snake();
         snake.x = 0;
         snake.y = 0;
         play = true;
@@ -33,7 +33,11 @@ public class Okno extends JPanel implements ActionListener{
     }
 
     public void draw(Graphics g){
-
+        for (int i = 0; i < WIDTH; i+=CELL)
+            g.drawLine(i, 0, i, HEIGHT);
+        for (int i = 0; i < HEIGHT; i+=CELL)
+            g.drawLine(0, i, WIDTH, i);
+        snake.draw(g);
     }
 
     /**
@@ -45,3 +49,4 @@ public class Okno extends JPanel implements ActionListener{
         repaint(); // перерисовывает все объекты в игре
     }
 }
+
