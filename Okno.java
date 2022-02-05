@@ -23,8 +23,6 @@ public class Okno extends JPanel implements ActionListener{
     }
 
     public void start(){
-        snake.x = 0;
-        snake.y = 0;
         play = true;
         timer = new Timer(DELAY, this);
         timer.start();
@@ -69,8 +67,12 @@ public class Okno extends JPanel implements ActionListener{
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        snake.move();
-        snake.checkWalls();
-        repaint(); // перерисовывает все объекты в игре
+        while (play) {
+            snake.move();
+            snake.checkWalls();
+            play = snake.checkCollisions();
+            repaint(); // перерисовывает все объекты в игре
+        }
     }
 }
+
