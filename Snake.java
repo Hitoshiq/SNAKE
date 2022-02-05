@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Snake {
     int SIZE;
@@ -55,7 +56,6 @@ public class Snake {
             case 'D' -> {
                 this.bodyY.set(0, this.bodyY.get(0)       +  this.SPEED);
             }
-
         }
     }
 
@@ -79,12 +79,22 @@ public class Snake {
 
 
     public boolean checkCollisions(){
+        for (int i = 1; i < this.bodyX.size(); i++){
+            if(Objects.equals(this.bodyY.get(0), this.bodyY.get(i)) && Objects.equals(this.bodyX.get(0), this.bodyX.get(i))){
+                 return false;
+            }
+        }
         return true;
     }
 
-    public void snake2(){}
-
+    public boolean checkFood(Food food){
+        if (this.bodyY.get(0) == food.y && this.bodyX.get(0) == food.x ){
+            this.bodyX.add(100000);
+            this.bodyY.add(100000);
+            return true;
+        }
+        return false;
+    }
 }
-
 
 
