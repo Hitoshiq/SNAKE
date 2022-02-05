@@ -1,25 +1,25 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Snake {
     int SIZE;
     Color COLOR;
-    ArrayList<Snake> bodyParts = new ArrayList<>();
-    int x;
-    int y;
     int SPEED;
     char direction;
     int WIDTH, HEIGHT;
+    ArrayList<Integer> bodyX;
+    ArrayList<Integer> bodyY;
 
     public Snake(int cell, Color color, int speed, char direction, int x, int y, int width, int height){
         this.SIZE = cell;
         this.COLOR = color;
         this.SPEED = speed;
         this.direction = direction;
-        this.x = x;
-        this.y = y;
         this.WIDTH = width;
         this.HEIGHT = height;
+        this.bodyX = new ArrayList<>(Arrays.asList(x, x - this.SIZE, x - 2 * this.SIZE));
+        this.bodyY = new ArrayList<>(Arrays.asList(y, y, y));
     }
 
     /**
@@ -27,25 +27,33 @@ public class Snake {
      * @param g объект, который рисует змею
      */
     public void draw(Graphics g){
-        g.fillRect(this.x, this.y, this.SIZE, this.SIZE);
+        for (int i = 0; i < bodyX.size(); i++)
+            g.fillRect(this.bodyX.get(i), this.bodyY.get(i), this.SIZE, this.SIZE);
     }
 
     /**
      * Змейка двигается на 1 блок
      */
     public void move(){
+//      части тела следуют за головой
+        for (int i = bodyX.size() - 1; i > 0; i--) {
+            this.bodyX.set(i, this.bodyX.get(i - 1));
+            this.bodyY.set(i, this.bodyY.get(i - 1));
+        }
+
+//      двигаем голову
         switch (this.direction) {
             case 'R' -> {
-                this.x += this.SPEED;
+                this.bodyX.set(0, this.bodyX.get(0)        +  this.SPEED);
             }
             case 'L' -> {
-                this.x -= this.SPEED;
+                this.bodyX.set(0, this.bodyX.get(0)       -   this.SPEED);
             }
             case 'U' -> {
-                this.y -= this.SPEED;
+                this.bodyY.set(0, this.bodyY.get(0)       -  this.SPEED);
             }
             case 'D' -> {
-                this.y += this.SPEED;
+                this.bodyY.set(0, this.bodyY.get(0)       +  this.SPEED);
             }
 
         }
@@ -54,21 +62,29 @@ public class Snake {
     /**
      * Тп в противоположную сторону при выход за пределы экрана
      */
-    public void checkWalls(){ 
-        if (this.x >= this.WIDTH){
-            this.x = 0;
+    public void checkWalls(){
+        if (this.bodyX.get(0) >= this.WIDTH){
+            this.bodyX.set(0, 0);
         }
-        if (this.x < 0){
-            this.x = this.WIDTH;
+        if (this.bodyX.get(0) < 0){
+            this.bodyX.set(0, this.WIDTH);
         }
-        if (this.y >= this.HEIGHT){
-            this.y = 0;
+        if (this.bodyY.get(0) >= this.HEIGHT){
+            this.bodyY.set(0, 0);
         }
-        if (this.y < 0){
-            this.y = this.HEIGHT;
+        if (this.bodyY.get(0) < 0){
+            this.bodyY.set(0, this.HEIGHT);
         }
-
     }
 
+
+    public boolean checkCollisions(){
+        return true;
+    }
+
+    public void snake2(){}
+
 }
+
+
 
