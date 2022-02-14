@@ -13,6 +13,7 @@ public class Okno extends JPanel implements ActionListener{
     boolean play;
     Timer timer;
     Snake snake = new Snake(CELL, Color.BLACK, CELL, 'R', 100, 100, WIDTH, HEIGHT);
+    Food food;
 
     public Okno(){
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -24,13 +25,20 @@ public class Okno extends JPanel implements ActionListener{
 
     public void start(){
         play = true;
+        food = new Food((int) (Math.random() * WIDTH / CELL) * CELL, (int) (Math.random() * HEIGHT / CELL) * CELL, CELL);
         timer = new Timer(DELAY, this);
         timer.start();
+
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        draw(g);
+        if(play) draw(g);
+        else {
+            OKNOOVER oknoover = new OKNOOVER();
+            this.setBackground(oknoover.getBackground());
+            oknoover.draw(g);
+        }
     }
 
     public void draw(Graphics g){
@@ -39,6 +47,7 @@ public class Okno extends JPanel implements ActionListener{
         for (int i = 0; i < HEIGHT; i+=CELL)
             g.drawLine(0, i, WIDTH, i);
         snake.draw(g);
+        food.draw(g);
     }
 
     public class MyKeyAdapter extends KeyAdapter {
@@ -67,12 +76,14 @@ public class Okno extends JPanel implements ActionListener{
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        while (play) {
+        if (play) {
             snake.move();
             snake.checkWalls();
             play = snake.checkCollisions();
-            repaint(); // перерисовывает все объекты в игре
+            if (snake.checkFood(food))
+                food = new Food((int) (Math.random() * WIDTH / CELL) * CELL, (int) (Math.random() * HEIGHT / CELL) * CELL, CELL);
         }
+
+        repaint(); // перерисовывает все объекты в игре
     }
 }
-
