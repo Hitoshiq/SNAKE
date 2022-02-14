@@ -81,7 +81,7 @@ public class Snake {
     public boolean checkCollisions(){
         for (int i = 1; i < this.bodyX.size(); i++){
             if(Objects.equals(this.bodyY.get(0), this.bodyY.get(i)) && Objects.equals(this.bodyX.get(0), this.bodyX.get(i))){
-                 return false;
+                return false;
             }
         }
         return true;
